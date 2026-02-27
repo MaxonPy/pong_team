@@ -1,31 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pong.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: maxim <maxim@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/27 18:30:00 by maxim             #+#    #+#             */
-/*   Updated: 2026/02/27 18:30:00 by maxim            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdio.h>
 
-#define WIDTH 80
-#define HEIGHT 25
-#define LEFT_WALL 0
-#define RIGHT_WALL 79
-#define TOP_WALL 0
-#define BOTTOM_WALL 24
-#define PADDLE_HEIGHT 3
-#define WIN_SCORE 21
+#define WIDTH 80 // ширина
+#define HEIGHT 25 // высота
+#define LEFT_WALL 0 // левая стена координата
+#define RIGHT_WALL 79 // правая стена координата 
+#define TOP_WALL 0 // координата верхней стены
+#define BOTTOM_WALL 24 // координата нижней стены т.к двигаемся с левого верхнего угла
+#define PADDLE_HEIGHT 3 // высота ракетки
+#define WIN_SCORE 21 // количестов очков для победы 
 
 #define HOR '-'
 #define VER '|'
 #define BALL '*'
 
-// Функция для очистки экрана с помощью ANSI escape последовательностей
+// функция очистки экрана РАЗОБРАТЬ!!! 
 void clear_screen(void)
 {
     printf("\033[2J\033[H");
@@ -114,7 +102,7 @@ int check_goal_left(int ball_x, int score2)
     {
         new_score = score2 + 1;
     }
-    
+
     return new_score;
 }
 
@@ -226,19 +214,19 @@ void draw_field(int paddle1_y, int paddle2_y, int ball_x, int ball_y, int score1
     clear_screen();
     
     // Верхняя граница
-    for (col = 0; col < WIDTH; col++)
+    for (col = 0; col < WIDTH; col++) // от 0 пока col < 80
     {
         printf("%c", HOR);
     }
     printf("\n");
     
     // Основное поле
-    for (row = 1; row < HEIGHT - 1; row++)
+    for (row = 1; row < HEIGHT - 1; row++) // от 1 пока row < 24 не учитывая левую и правую границу
     {
-        // Левая граница
+        // сраpe отрисовываем вертикальную черту левой границы
         printf("%c", VER);
         
-        for (col = 1; col < WIDTH - 1; col++)
+        for (col = 1; col < WIDTH - 1; col++) // от 1 пока col < 79
         {
             is_paddle1 = 0;
             is_paddle2 = 0;
@@ -259,7 +247,6 @@ void draw_field(int paddle1_y, int paddle2_y, int ball_x, int ball_y, int score1
             {
                 is_ball = 1;
             }
-            
             if (is_paddle1 == 1 || is_paddle2 == 1)
             {
                 printf("%c", VER);
@@ -290,26 +277,32 @@ void draw_field(int paddle1_y, int paddle2_y, int ball_x, int ball_y, int score1
     printf("Press SPACE to skip turn, 'q' to quit\n");
 }
 
-// Функция обработки ввода
+// функция двигает ракетки вверх
 int move_paddle1_up(int paddle1_y)
 {
     int new_paddle1_y;
     
     new_paddle1_y = paddle1_y;
+    //  если ракетка не у верхней границы
     if (paddle1_y > 1)
     {
+        // тк мы отсчитываем слева сверху 
+        // если мы хотим поднять ракетку вверх - уменьшаем координату
         new_paddle1_y = paddle1_y - 1;
     }
     return new_paddle1_y;
 }
-
+// функция двигает ракетки вниз
 int move_paddle1_down(int paddle1_y)
 {
     int new_paddle1_y;
     
     new_paddle1_y = paddle1_y;
+    // если Y ракетки < (высота поля - высота ракетки - 1)
+    // мы считаем Y координату ракетки по ВЕРХНЕЙ точке самой ракетки
     if (paddle1_y < HEIGHT - PADDLE_HEIGHT - 1)
     {
+        // прибавляем => 
         new_paddle1_y = paddle1_y + 1;
     }
     return new_paddle1_y;
@@ -381,7 +374,7 @@ void show_winner(int score1, int score2)
 
 int main(void)
 {
-    // Инициализация переменных игры
+    // инициализация переменных игры
     int paddle1_y;
     int paddle2_y;
     int ball_x;
@@ -393,13 +386,13 @@ int main(void)
     int game_over;
     
     char c;
-    
+    // сохранение пред изменений
     int temp_ball_x;
     int temp_ball_y;
     int temp_score1;
     int temp_score2;
     
-    // Начальные значения
+    // нначальные значения
     paddle1_y = 11;
     paddle2_y = 11;
     ball_x = 40;
@@ -417,10 +410,10 @@ int main(void)
     printf("SPACE - skip turn\n");
     printf("Press Enter to start...\n");
     
-    // Ожидание нажатия Enter для начала игры
+    // считываем 1 символ 
     c = getchar();
     
-    // Основной игровой цикл
+    // основной игровой цикл
     while (game_over == 0)
     {
         // Отрисовка поля
