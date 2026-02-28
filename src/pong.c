@@ -244,7 +244,7 @@ int main(void) {
                 case 'z': case 'Z': paddle1_y = move_paddle1_down(paddle1_y); break;
                 case 'k': case 'K': paddle2_y = move_paddle2_up(paddle2_y); break;
                 case 'm': case 'M': paddle2_y = move_paddle2_down(paddle2_y); break;
-                case 'q': case 'Q': show_winner(score1, score2); getch(); endwin(); return 0;
+                case 'q': case 'Q': show_winner(score1, score2); timeout(-1); getch(); endwin(); return 0;
 
                 break;
                 // Пробел - ничего не делаем
